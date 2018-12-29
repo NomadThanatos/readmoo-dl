@@ -7,7 +7,6 @@ module ReadmooDL
 
     def fetch(path)
       login unless login?
-
       response = Http.headers(default_headers)
                      .get("#{ReadmooDL::API_URL}#{path}")
 
@@ -22,6 +21,7 @@ module ReadmooDL
 
     def login
       headers = default_headers.merge(
+        origin: 'https://member.readmoo.com',
         :'content-type' => 'application/x-www-form-urlencoded; charset=UTF-8',
       )
 
@@ -34,7 +34,6 @@ module ReadmooDL
 
     def default_headers
       @default_headers ||= {
-        origin: 'https://member.readmoo.com',
         :'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) ' \
                        'AppleWebKit/537.36 (KHTML, like Gecko) ' \
                        'Chrome/71.0.3578.98 Safari/537.36',
@@ -43,8 +42,16 @@ module ReadmooDL
       }
     end
 
+    def current_cookie
+      @current_cookie ||= {}
+    end
+
     def set_cookie(response)
-      cookie = response.cookies.reduce('') { |cookie_str, item| cookie_str + "#{item.to_s}; " }.strip
+      cookie_jar = response.cookies
+      cookie_hash = cookie_jar.map { |cookie| [cookie.name, cookie.value] }.to_h
+      current_cookie.merge!(cookie_hash)
+      cookie = current_cookie.reduce('') { |cookie, (name, value)| cookie + "#{name}=#{value}; " }.strip
+
       default_headers.merge!(Cookie: cookie)
     end
 
