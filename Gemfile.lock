@@ -19,6 +19,7 @@ GEM
     nokogiri (1.9.1)
       mini_portile2 (~> 2.4.0)
     public_suffix (3.0.3)
+    rubyzip (1.2.2)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.5)
@@ -30,6 +31,7 @@ DEPENDENCIES
   byebug
   http
   nokogiri
+  rubyzip (>= 1.0.0)
 
 BUNDLED WITH
    1.17.3
