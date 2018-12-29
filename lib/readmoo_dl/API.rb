@@ -11,7 +11,8 @@ module ReadmooDL
       response = Http.headers(default_headers)
                      .get("#{ReadmooDL::API_URL}#{path}")
 
-      raise_fetch_fail(response) if response.code != 200
+      raise_fetch_fail(path, response) if response.code != 200
+
       set_cookie(response)
 
       response.to_s
@@ -21,7 +22,6 @@ module ReadmooDL
 
     def login
       headers = default_headers.merge(
-        :'authority' => 'member.readmoo.com',
         :'content-type' => 'application/x-www-form-urlencoded; charset=UTF-8',
       )
 
@@ -44,9 +44,8 @@ module ReadmooDL
     end
 
     def set_cookie(response)
-      return if response.headers['Set-Cookie'].nil?
-
-      default_headers.merge!(Cookie: response.headers['Set-Cookie'].join)
+      cookie = response.cookies.reduce('') { |cookie_str, item| cookie_str + "#{item.to_s}; " }.strip
+      default_headers.merge!(Cookie: cookie)
     end
 
     def login?
@@ -57,7 +56,7 @@ module ReadmooDL
       raise "登入失敗, Details: StatusCode: #{response.code}, Body: #{response}, Headers: #{response.headers.inspect}"
     end
 
-    def raise_fetch_fail(response)
+    def raise_fetch_fail(path, response)
       raise "取得 #{path} 失敗, Details: StatusCode: #{response.code}, Body: #{response}, Headers: #{response.headers.inspect}"
     end
   end
