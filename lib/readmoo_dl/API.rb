@@ -50,7 +50,7 @@ module ReadmooDL
     end
 
     def login?
-      @default_headers.has_key?(:Cookie)
+      @default_headers && @default_headers.has_key?(:Cookie)
     end
 
     def raise_login_fail(response)
