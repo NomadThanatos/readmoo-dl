@@ -1,0 +1,17 @@
+require_relative 'lib/readmoo_dl'
+
+username = 'xxxxxxx@gmail.com' # 你的 readmoo 帳號
+password = '12345678' # 你的 readmoo 密碼
+
+downloader = ReadmooDL::Downloader.new(username, password)
+
+#
+# 書籍編號可以從書籍網址取得，例如書籍網址為 「https://readmoo.com/book/210088579000101」，
+# 則編號是 210088579000101，那麼下方的程式碼就改為 「downloader.download('210088579000101')」。
+# (注意: 1. 單引號不要刪掉 2. 要有購買過的書籍才可以下載)
+#
+# 可以複製多行一次下載多本：
+#  downloader.download('12345678')
+#  downloader.download('87654321')
+#
+downloader.download('你的書籍編號')
