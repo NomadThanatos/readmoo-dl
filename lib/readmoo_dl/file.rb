@@ -4,7 +4,7 @@ module ReadmooDL
 
     def initialize(path, content)
       @path = path
-      @context = content
+      @content = content
     end
   end
 end
