@@ -6,10 +6,18 @@ module ReadmooDL
     end
 
     def fetch(path)
+      login unless login?
+
       response = Http.headers(default_headers)
                      .get("#{ReadmooDL::API_URL}#{path}")
+
+      raise_fetch_fail(response) if response.code != 200
       set_cookie(response)
+
+      response.to_s
     end
+
+    private
 
     def login
       headers = default_headers.merge(
@@ -18,16 +26,11 @@ module ReadmooDL
       )
 
       response = HTTP.headers(headers)
-                     .post(ReadmooDL::LOGIN_URL,
-                           form: { email: @username, password: @password })
-      if response.code != 200
-        raise "登入失敗, Details: StatusCode: #{response.code}, Body: #{response}, Headers: #{response.headers.inspect}"
-      end
-
+                     .post(ReadmooDL::LOGIN_URL, form: { email: @username, password: @password })
+      raise_login_fail(response) if response.code != 200
       set_cookie(response)
+      response.to_s
     end
-
-    private
 
     def default_headers
       @default_headers ||= {
@@ -41,8 +44,21 @@ module ReadmooDL
     end
 
     def set_cookie(response)
+      return if response.headers['Set-Cookie'].nil?
+
       default_headers.merge!(Cookie: response.headers['Set-Cookie'].join)
-      response
+    end
+
+    def login?
+      @default_headers.has_key?(:Cookie)
+    end
+
+    def raise_login_fail(response)
+      raise "登入失敗, Details: StatusCode: #{response.code}, Body: #{response}, Headers: #{response.headers.inspect}"
+    end
+
+    def raise_fetch_fail(response)
+      raise "取得 #{path} 失敗, Details: StatusCode: #{response.code}, Body: #{response}, Headers: #{response.headers.inspect}"
     end
   end
 end
