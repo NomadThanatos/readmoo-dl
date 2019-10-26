@@ -37,7 +37,8 @@ module ReadmooDL
         :'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) ' \
                        'AppleWebKit/537.36 (KHTML, like Gecko) ' \
                        'Chrome/71.0.3578.98 Safari/537.36',
-        :'x-requested-with' => 'XMLHttpRequest'
+        :'x-requested-with' => 'XMLHttpRequest',
+        :'referer' => 'https://reader.readmoo.com/reader/index.html',
       }
     end
 
