@@ -7,7 +7,7 @@ module ReadmooDL
 
     def fetch(path)
       login unless login?
-      response = Http.headers(default_headers)
+      response = HTTP.headers(default_headers)
                      .get("#{ReadmooDL::API_URL}#{path}")
 
       raise_fetch_fail(path, response) if response.code != 200
