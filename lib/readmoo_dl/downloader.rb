@@ -93,7 +93,7 @@ module ReadmooDL
       book = @books[book_id]
       title = book[:root_file].title
       files = book[:files]
-      filename = "#{book_id}_#{title}.epub"
+      filename = "#{title}.epub"
 
       Zip::File.open(filename, Zip::File::CREATE) do |zipfile|
         files.each do |file|
