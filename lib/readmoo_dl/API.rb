@@ -11,9 +11,17 @@ module ReadmooDL
                      .get("#{ReadmooDL::API_URL}#{path}")
 
       raise_fetch_fail(path, response) if response.code != 200
-
       set_cookie(response)
+      response.to_s
+    end
 
+    def list()
+      login unless login?
+      response = HTTP.headers(default_headers)
+                     .get("#{ReadmooDL::LIST_URL}")
+
+      raise_fetch_fail(path, response) if response.code != 200
+      set_cookie(response)
       response.to_s
     end
 

@@ -15,3 +15,22 @@ downloader = ReadmooDL::Downloader.new(username, password)
 #  downloader.download('87654321')
 #
 downloader.download('你的書籍編號')
+
+# Below code will download every book you have, and save the list to history.txt to avoid re-downloading in future.
+# Remove the corresponding line in history.txt if you want to re-download a specific one.
+=begin
+lister = ReadmooDL::Lister.new(username, password)
+history = {}
+File.readlines('history.txt').each do |line|
+  history_item = JSON.parse(line)
+  history[history_item['id']] = history_item['title']
+end
+
+File.open('history.txt', 'a') do |history_file|
+  lister.list.each do |item|
+    next unless history[item['id']]
+    downloader.download(item['id'])
+    history_file.puts(item.to_json)
+  end
+end
+=end
