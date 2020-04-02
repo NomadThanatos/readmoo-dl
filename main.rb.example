@@ -28,7 +28,7 @@ end
 
 File.open('history.txt', 'a') do |history_file|
   lister.list.each do |item|
-    next unless history[item['id']]
+    next if history[item['id']]
     downloader.download(item['id'])
     history_file.puts(item.to_json)
   end
