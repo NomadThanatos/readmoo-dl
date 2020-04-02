@@ -5,7 +5,7 @@ module ReadmooDL
       @books = {}
     end
 
-    def list()
+    def list
         JSON.parse(@api.list())['included'].map do |item|
             item.slice('id', 'title')
         end
