@@ -21,11 +21,9 @@ downloader.download('你的書籍編號')
 =begin
 lister = ReadmooDL::Lister.new(username, password)
 history = {}
-File.open('history.txt', 'r') do |f|
-    while line = f.gets
-        history_item = JSON.parse(line)
-        history[history_item['id']] = history_item['title']
-    end
+File.readlines('history.txt').each do |line|
+  history_item = JSON.parse(line)
+  history[history_item['id']] = history_item['title']
 end
 
 lister.list().each do |item|
