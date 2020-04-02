@@ -6,11 +6,9 @@ module ReadmooDL
     end
 
     def list()
-        result = [];
-        JSON.parse(@api.list())['included'].each do |item|
-            result.push(item.slice("id", "title"))
+        JSON.parse(@api.list())['included'].map do |item|
+            item.slice('id', 'title')
         end
-        result
     end
   end
 end
