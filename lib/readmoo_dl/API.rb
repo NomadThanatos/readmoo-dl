@@ -11,7 +11,7 @@ module ReadmooDL
                      .get("#{ReadmooDL::API_URL}#{path}")
 
       raise_fetch_fail(path, response) if response.code != 200
-      set_cookie(response)
+      set_cookie(response.cookies)
       response.to_s
     end
 
@@ -21,23 +21,34 @@ module ReadmooDL
                      .get("#{ReadmooDL::LIST_URL}")
 
       raise_fetch_fail(path, response) if response.code != 200
-      set_cookie(response)
+      set_cookie(response.cookies)
       response.to_s
     end
 
     private
 
-    def login
-      headers = default_headers.merge(
-        origin: 'https://member.readmoo.com',
-        :'content-type' => 'application/x-www-form-urlencoded; charset=UTF-8',
-      )
+    def login_selenium(driver)
+      sleep(1)
+      driver.find_element(:name, 'email').send_key(@username)
+      sleep(1)
+      driver.find_element(:name, 'password').send_key(@password)
+      driver.find_element(:id, 'sign-in-btn').click
 
-      response = HTTP.headers(headers)
-                     .post(ReadmooDL::LOGIN_URL, form: { email: @username, password: @password })
-      raise_login_fail(response) if response.code != 200
-      set_cookie(response)
-      response.to_s
+      #Need wait the page is fully loaded to get the cookies;
+      sleep(30)
+      driver
+    end
+
+    def login
+      driver = Selenium::WebDriver.for :chrome
+      driver.navigate.to(ReadmooDL::LOGIN_URL)
+
+      driver = login_selenium(driver)
+      cookies = driver.manage.all_cookies.each{ |e|
+	e[:expires]=(e[:expires]||Time.now).strftime('%a, %d-%b-%Y %T GMT')
+      }.map{ |e| HTTP::Cookie.new(e) }
+
+      set_cookie(cookies)
     end
 
     def default_headers
@@ -54,8 +65,7 @@ module ReadmooDL
       @current_cookie ||= {}
     end
 
-    def set_cookie(response)
-      cookie_jar = response.cookies
+    def set_cookie(cookie_jar)
       cookie_hash = cookie_jar.map { |cookie| [cookie.name, cookie.value] }.to_h
       current_cookie.merge!(cookie_hash)
       cookie = current_cookie.reduce('') { |cookie, (name, value)| cookie + "#{name}=#{value}; " }.strip
