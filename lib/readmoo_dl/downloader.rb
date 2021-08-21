@@ -2,8 +2,8 @@ require 'zip'
 
 module ReadmooDL
   class Downloader
-    def initialize(username, password)
-      @api = API.new(username: username, password: password)
+    def initialize(api)
+      @api = api
       @books = {}
     end
 

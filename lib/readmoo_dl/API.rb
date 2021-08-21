@@ -48,6 +48,8 @@ module ReadmooDL
 	e[:expires]=(e[:expires]||Time.now).strftime('%a, %d-%b-%Y %T GMT')
       }.map{ |e| HTTP::Cookie.new(e) }
 
+      driver.quit
+
       set_cookie(cookies)
     end
 
