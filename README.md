@@ -16,6 +16,7 @@
 4. 複製 main.rb.example 到專案根目錄，並且改名為 main.rb
     
     ``` mv main.rb.example main.rb ```
+    ``` mv history.txt.example history.txt ```
     
 5. 依照 main.rb 裡面的說明修改程式
 

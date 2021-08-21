@@ -5,9 +5,9 @@ module ReadmooDL
       @password = args[:password]
     end
 
-    def fetch(path)
+    def fetch(path, auth = {})
       login unless login?
-      response = HTTP.headers(default_headers)
+      response = HTTP.headers(default_headers.merge(auth))
                      .get("#{ReadmooDL::API_URL}#{path}")
 
       raise_fetch_fail(path, response) if response.code != 200
