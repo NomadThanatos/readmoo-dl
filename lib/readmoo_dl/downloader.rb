@@ -39,7 +39,7 @@ module ReadmooDL
     end
 
     def fetch_base_file(book_id)
-      content = @api.fetch("/api/book/#{book_id}/nav", {:'authorization' => 'bearer ********'}).to_s
+      content = @api.fetch("/api/book/#{book_id}/nav", {:'authorization' => 'bearer TWBLXfuP-NbtCrjD2PAiFA'}).to_s
       @books[book_id][:base_path] = JSON.parse(content)['base']
     end
 
