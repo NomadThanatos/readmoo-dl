@@ -1,4 +1,5 @@
 require 'zip'
+require 'pathname'
 
 module ReadmooDL
   class Downloader
@@ -97,7 +98,7 @@ module ReadmooDL
 
       Zip::File.open(filename, Zip::File::CREATE) do |zipfile|
         files.each do |file|
-          zipfile.get_output_stream(file.path) { |zip| zip.write(file.content) }
+          zipfile.get_output_stream(Pathname.new(file.path).cleanpath) { |zip| zip.write(file.content) }
         end
       end
     end
