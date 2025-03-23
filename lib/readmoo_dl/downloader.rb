@@ -96,6 +96,9 @@ module ReadmooDL
       files = book[:files]
       filename = "#{title}.epub"
 
+      # Replace reserved characters that shouldn't be used in file names
+      filename = filename.gsub(/[\/\\:\*\?\"\<\>\|]/, '_')
+
       Zip::File.open(filename, Zip::File::CREATE) do |zipfile|
         files.each do |file|
           zipfile.get_output_stream(Pathname.new(file.path).cleanpath) { |zip| zip.write(file.content) }
