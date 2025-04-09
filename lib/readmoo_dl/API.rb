@@ -27,6 +27,8 @@ module ReadmooDL
 
     private
 
+    require 'selenium-webdriver'
+
     def login_selenium(driver)
       sleep(1)
       driver.find_element(:name, 'email').send_key(@username)
@@ -34,8 +36,17 @@ module ReadmooDL
       driver.find_element(:name, 'password').send_key(@password)
       driver.find_element(:id, 'sign-in-btn').click
 
-      #Need wait the page is fully loaded to get the cookies;
-      sleep(30)
+      puts "請在瀏覽器中完成登入（包含 CAPTCHA），腳本將等待最多 5 分鐘..."
+      wait = Selenium::WebDriver::Wait.new(timeout: 300) # 300 seconds timeout
+      begin
+        wait.until { driver.find_element(css: '.member-data-nav .top-nav-my').displayed? }
+        puts "登入成功，繼續執行..."
+      rescue Selenium::WebDriver::Error::TimeoutError
+        puts "等待登入超時（超過 5 分鐘），請重試。"
+        driver.quit
+        raise "Login timed out after 300 seconds waiting for CAPTCHA completion."
+      end
+
       driver
     end
 
