@@ -22,7 +22,6 @@ module ReadmooDL
         root_file_path: nil,
         root_file: nil,
         files: [
-          ::ReadmooDL::File.new('mimetype', 'application/epub+zip')
         ]
       }
 
@@ -166,9 +165,13 @@ module ReadmooDL
       # Replace reserved characters that shouldn't be used in file names
       filename = filename.gsub(/[\/\\:\*\?\"\<\>\|]/, '_')
 
-      Zip::File.open(filename, Zip::File::CREATE) do |zipfile|
+      ::Zip::OutputStream.open(filename) do |stream|
+        stream.put_next_entry('mimetype', nil, nil, ::Zip::Entry::STORED)
+        stream.write "application/epub+zip"
+
         files.each do |file|
-          zipfile.get_output_stream(Pathname.new(file.path).cleanpath) { |zip| zip.write(file.content) }
+          stream.put_next_entry Pathname.new(file.path).cleanpath, nil, nil, Zip::Entry::DEFLATED, Zlib::BEST_COMPRESSION
+          stream.write file.content
         end
       end
 
