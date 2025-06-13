@@ -130,16 +130,11 @@ module ReadmooDL
     def validate_cookies_headlessly
       return false if @current_cookie.empty? # No cookies to validate
 
-      puts "Validating loaded cookies headlessly..."
-      options = Selenium::WebDriver::Chrome::Options.new
-      options.add_argument('--headless')
-      options.add_argument('--disable-gpu') # Often needed for headless
-      options.add_argument('--no-sandbox') # May be needed in some environments
-      options.add_argument('--disable-dev-shm-usage') # Overcome limited resource problems
+      puts "Validating loaded cookies"
 
       driver = nil
       begin
-        driver = Selenium::WebDriver.for :chrome, options: options
+        driver = Selenium::WebDriver.for :chrome
         # Navigate to the domain first to set cookies for that domain
         driver.navigate.to FRONT_PAGE_URL
 
