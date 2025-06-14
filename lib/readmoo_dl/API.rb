@@ -1,5 +1,6 @@
 module ReadmooDL
   class API
+    BROWSER = :chrome
     COOKIE_FILE = 'cookies.json' # Define path for cookie storage
     FRONT_PAGE_URL = 'https://readmoo.com/'.freeze
     LOGGED_IN_SELECTOR = '.member-data-nav .top-nav-my'.freeze
@@ -68,7 +69,7 @@ module ReadmooDL
       # Only proceed with Selenium login if cookies weren't loaded or are invalid
       return if login?
 
-      driver = Selenium::WebDriver.for :chrome
+      driver = Selenium::WebDriver.for BROWSER
       driver.navigate.to(ReadmooDL::LOGIN_URL)
 
       driver = login_selenium(driver)
@@ -134,7 +135,7 @@ module ReadmooDL
 
       driver = nil
       begin
-        driver = Selenium::WebDriver.for :chrome
+        driver = Selenium::WebDriver.for BROWSER
         # Navigate to the domain first to set cookies for that domain
         driver.navigate.to FRONT_PAGE_URL
 
