@@ -5,7 +5,7 @@ Bundler.require(:default)
 require 'json'
 
 module ReadmooDL
-  LOGIN_URL = 'https://member.readmoo.com/login'
+  LOGIN_URL = 'https://next.readmoo.com/zh-TW/auth/signin'
   API_URL = 'https://reader.readmoo.com'
   LIST_URL = 'https://new-read.readmoo.com/api/me/readings'
 end

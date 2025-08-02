@@ -48,8 +48,7 @@ module ReadmooDL
       sleep(1)
       driver.find_element(:name, 'email').send_key(@username)
       sleep(1)
-      driver.find_element(:name, 'password').send_key(@password)
-      driver.find_element(:id, 'sign-in-btn').click
+      driver.find_element(:css, 'button[type="submit"]').click
 
       puts "請在瀏覽器中完成登入（包含 CAPTCHA），腳本將等待最多 5 分鐘..."
       wait = Selenium::WebDriver::Wait.new(timeout: 300) # 300 seconds timeout

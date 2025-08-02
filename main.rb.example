@@ -1,7 +1,6 @@
 require_relative 'lib/readmoo_dl'
 
 username = 'xxxxxxx@gmail.com' # 你的 readmoo 帳號
-password = '12345678' # 你的 readmoo 密碼
 
 api = ReadmooDL::API.new(username: username, password: password)
 
